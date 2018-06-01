@@ -20,3 +20,7 @@ urlpatterns = [
     url(r'^split/', include('split.urls')),
     url(r'^admin/', admin.site.urls),
 ]
+
+urlpatterns += [
+    url(r'^split/', include('django.contrib.auth.urls')),
+]
