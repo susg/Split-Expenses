@@ -1,0 +1,14 @@
+Members: <br>
+<ul>
+{% for g in groups %}
+<li> <a href = "/split/group/{{g.id}}"> {{ g }} </a> </li>
+{% endfor %}
+</ul>
+<br>
+
+Owner:
+<ul>
+{% for o in owner %}
+<li> <a href="/split/group/{{o.id}}"> {{ o }} </a> </li>
+</ul>
+{% endfor %}

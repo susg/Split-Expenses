@@ -15,7 +15,7 @@ class UserProfile(models.Model):
 class GroupProfile(models.Model):
     group = models.OneToOneField(Group, related_name='groups')
     date_createsd = models.DateField(default=datetime.now, blank=True)
-    user_created = models.OneToOneField(UserProfile, related_name='users')
+    user_created = models.ForeignKey(UserProfile, related_name='owners')
     members = models.ManyToManyField(UserProfile, related_name='members')
 
     def __str__(self):
