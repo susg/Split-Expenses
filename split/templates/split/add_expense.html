@@ -1,0 +1,7 @@
+<form action="/split/adding/{{ group_id }}/" method="post">
+  {% csrf_token %}
+    <input type="date" name="date"  value="Date Spent" />
+    <input type="number" name="amount"  value="Amount Spent" />
+    <input type="text" name="details"  value="Details" />
+    <input type="submit" value="Submit" />
+  </form>

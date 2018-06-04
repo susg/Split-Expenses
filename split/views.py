@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from django import template
 from django.template.loader import get_template 
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 @login_required(login_url='/split/login/')
 def profile(request):
@@ -25,6 +25,7 @@ def profile(request):
 	
 def group_profile(request, group_id):
 
+	print "I am here"
 	group = Group.objects.get(pk = group_id).groups
 	#print group.members.all()
 	record = group.expensedetail_set.all()
@@ -52,5 +53,51 @@ def group_profile(request, group_id):
 			'pers_exp' : pers_exp,
 		})			
 	
-def add_record(request):
-	return HttpResponse("Hello, world. You're at group.")
+def add_expense(request, group_id):
+
+	return render(request, 'split/add_expense.html',
+	{
+		'group_id' : group_id,
+	})
+	#return HttpResponse("Hello, world. You're at group.")
+
+def adding(request, group_id):
+
+	spender = request.user.users
+	group = Group.objects.get(pk = group_id).groups
+	date_sp = request.POST['date']
+	amount = request.POST['amount']
+	details = request.POST['details']
+
+	r = ExpenseDetail(spender = spender, group_spent = group, date_spent = date_sp,
+		 				amount = amount, details = details)
+	r.save()
+	#group.add(r)
+
+	return redirect('group_profile', group_id = group_id)
+
+def delete_expense(request, group_id):
+
+	return render(request, 'split/delete_expense.html',
+	{
+		'group_id' : group_id,
+	})
+	#return HttpResponse("Hello, world. You're at group.")
+
+def deleting(request, group_id):
+
+	spender = request.user.users
+	group = Group.objects.get(pk = group_id).groups
+	date_sp = request.POST['date']
+	amount = request.POST['amount']
+	details = request.POST['details']
+
+	r = ExpenseDetail(spender = spender, group_spent = group, date_spent = date_sp,
+		 				amount = amount, details = details)
+	r.save()
+	#group.add(r)
+
+	return redirect('group_profile', group_id = group_id)
+
+
+
