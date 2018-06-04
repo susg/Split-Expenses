@@ -1,0 +1,7 @@
+<form action="/split/deleting/{{ group_id }}/" method="post">
+    {% csrf_token %}
+    {% for r in record %}
+        <input type="checkbox" name="record" value="{{ r.id }} "> {{ r }} <br>
+    {% endfor %}
+    <input type="submit" value="Submit" />    
+</form>

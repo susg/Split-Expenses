@@ -78,15 +78,25 @@ def adding(request, group_id):
 
 def delete_expense(request, group_id):
 
+	group = Group.objects.get(pk = group_id).groups
+	record = group.expensedetail_set.all()
+	
 	return render(request, 'split/delete_expense.html',
 	{
 		'group_id' : group_id,
+		'record' : record,
 	})
 	#return HttpResponse("Hello, world. You're at group.")
 
 def deleting(request, group_id):
 
-	spender = request.user.users
+	for r in request.POST.getlist('record'):
+		ExpenseDetail.objects.filter(id = r).delete()
+
+	return redirect('group_profile', group_id = group_id)
+	#return HttpResponse("Hello, world. You're at group.")
+
+	'''spender = request.user.users
 	group = Group.objects.get(pk = group_id).groups
 	date_sp = request.POST['date']
 	amount = request.POST['amount']
@@ -98,6 +108,6 @@ def deleting(request, group_id):
 	#group.add(r)
 
 	return redirect('group_profile', group_id = group_id)
-
+'''
 
 
