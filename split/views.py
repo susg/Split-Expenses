@@ -16,7 +16,7 @@ def profile(request):
 
 	groups = user.users.members.all()
 	owner = user.users.owners.all()
-
+	
 	return render(request, 'split/home.html',
 		{
 			'groups' : groups,
@@ -26,7 +26,7 @@ def profile(request):
 def group_profile(request, group_id):
 
 	print "I am here"
-	group = Group.objects.get(pk = group_id).groups
+	group = GroupProfile.objects.get(pk = group_id)
 	#print group.members.all()
 	record = group.expensedetail_set.all()
 	#print record
@@ -64,7 +64,7 @@ def add_expense(request, group_id):
 def adding(request, group_id):
 
 	spender = request.user.users
-	group = Group.objects.get(pk = group_id).groups
+	group = GroupProfile.objects.get(pk = group_id)
 	date_sp = request.POST['date']
 	amount = request.POST['amount']
 	details = request.POST['details']
@@ -78,7 +78,7 @@ def adding(request, group_id):
 
 def delete_expense(request, group_id):
 
-	group = Group.objects.get(pk = group_id).groups
+	group = GroupProfile.objects.get(pk = group_id)
 	record = group.expensedetail_set.all()
 	
 	return render(request, 'split/delete_expense.html',
@@ -96,6 +96,14 @@ def deleting(request, group_id):
 	return redirect('group_profile', group_id = group_id)
 	#return HttpResponse("Hello, world. You're at group.")
 
+def create_group(request):
+
+	return render(request, 'split/create_group.html')
+
+def creating(request):
+
+	owner = request.user
+		
 	'''spender = request.user.users
 	group = Group.objects.get(pk = group_id).groups
 	date_sp = request.POST['date']
