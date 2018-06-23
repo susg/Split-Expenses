@@ -102,8 +102,32 @@ def create_group(request):
 
 def creating(request):
 
-	owner = request.user
-		
+	owner = request.user.users
+	name = request.POST['name']
+	desc = request.POST['description']
+	date_created = datetime.now().date()
+
+	g = GroupProfile(name = name, description = desc, date_created = date_created,
+						user_created = owner)
+	g.save()
+	g.members.add(owner)
+	return redirect('group_profile', group_id = g.id)
+
+def add_member(request, group_id):
+
+	return render(request, 'split/add_member.html',
+		{
+			'group_id' : group_id
+		})
+
+def adding_member(request, group_id):
+
+	user = User.objects.get(username = request.POST['username']).users
+	group = GroupProfile.objects.get(pk = group_id)
+	group.members.add(user)
+
+	return redirect('group_profile', group_id = group_id)
+	
 	'''spender = request.user.users
 	group = Group.objects.get(pk = group_id).groups
 	date_sp = request.POST['date']
