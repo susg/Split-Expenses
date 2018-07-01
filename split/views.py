@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import login, authenticate
 from models import *
 from datetime import datetime
 from django.http import HttpResponseRedirect, HttpResponse
@@ -6,6 +7,27 @@ from django.urls import reverse
 from django import template
 from django.template.loader import get_template 
 from django.shortcuts import render, redirect
+
+def sign_up(request):
+
+	return render(request, 'split/sign_up.html')
+
+def signing_up(request):
+
+	user = User.objects.create_user(
+		username = request.POST['username'],
+		email = request.POST['email'],
+		password = request.POST['pwd'],
+		first_name = request.POST['fname'],
+		last_name = request.POST['lname']
+	)
+	u = UserProfile(user = user, total_balance = 0)
+	u.save()
+	user = authenticate(username = request.POST['username'],
+			 password = request.POST['pwd'],)
+	login(request, user)
+	
+	return redirect('profile')
 
 @login_required(login_url='/split/login/')
 def profile(request):
@@ -19,17 +41,17 @@ def profile(request):
 	
 	return render(request, 'split/home.html',
 		{
+			'user' : user,
 			'groups' : groups,
 			'owner' : owner,
 		})			
 	
 def group_profile(request, group_id):
 
-	print "I am here"
+	user = request.user
 	group = GroupProfile.objects.get(pk = group_id)
 	#print group.members.all()
 	record = group.expensedetail_set.all()
-	#print record
 	pers_exp = {}
 	tot_sum = 0
 	for r in record:
@@ -51,6 +73,9 @@ def group_profile(request, group_id):
 			'sum' : tot_sum,
 			'pps' : tot_sum/3,
 			'pers_exp' : pers_exp,
+			'groups' : user.users.members.all(),
+			'owner' : user.users.owners.all(),
+	
 		})			
 	
 def add_expense(request, group_id):
@@ -88,13 +113,23 @@ def delete_expense(request, group_id):
 	})
 	#return HttpResponse("Hello, world. You're at group.")
 
-def deleting(request, group_id):
+'''def deleting(request, group_id):
 
 	for r in request.POST.getlist('record'):
 		ExpenseDetail.objects.filter(id = r).delete()
 
 	return redirect('group_profile', group_id = group_id)
 	#return HttpResponse("Hello, world. You're at group.")
+'''
+
+def deleting(request, record_id):
+
+	r = ExpenseDetail.objects.get(id = record_id)
+	group_id = r.group_spent.id 
+	r.delete()
+
+	return redirect('group_profile', group_id = group_id)
+
 
 def create_group(request):
 
