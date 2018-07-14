@@ -57,13 +57,19 @@ def group_profile(request, group_id):
 	for r in record:
 		tot_sum += r.amount
 		try:
-			pers_exp[r.spender.user.username] += r.amount
+			pers_exp[r.spender.user.username][0] += r.amount
 		except KeyError:
-			pers_exp[r.spender.user.username] = r.amount
+			pers_exp[r.spender.user.username] = []
+			pers_exp[r.spender.user.username].append(r.amount)
 
-	pps = tot_sum/3
+	for key in pers_exp:
+		pers_exp[key].append(
+			(pers_exp[key][0]*100)/tot_sum
+		)
+		print pers_exp[key][1]
+	#pps = tot_sum/len()
 
-	print pers_exp
+	#print pers_exp
 
 	return render(request, 'split/group.html',
 		{
@@ -71,7 +77,7 @@ def group_profile(request, group_id):
 			'members' : group.members.all(),
 			'record' : record,
 			'sum' : tot_sum,
-			'pps' : tot_sum/3,
+			'pps' : tot_sum/(len(group.members.all()) + 1),
 			'pers_exp' : pers_exp,
 			'groups' : user.users.members.all(),
 			'owner' : user.users.owners.all(),
@@ -86,7 +92,7 @@ def add_expense(request, group_id):
 	})
 	#return HttpResponse("Hello, world. You're at group.")
 
-def adding(request, group_id):
+def adding_expense(request, group_id):
 
 	spender = request.user.users
 	group = GroupProfile.objects.get(pk = group_id)
@@ -145,7 +151,7 @@ def creating(request):
 	g = GroupProfile(name = name, description = desc, date_created = date_created,
 						user_created = owner)
 	g.save()
-	g.members.add(owner)
+	#g.members.add(owner)
 	return redirect('group_profile', group_id = g.id)
 
 def add_member(request, group_id):

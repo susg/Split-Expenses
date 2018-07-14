@@ -331,24 +331,16 @@
           <li class="sub-menu">
             <a href="javascript:;" class="">
                           <i class="icon_document_alt"></i>
-                          <span>Members</span>
-                          <span class="menu-arrow arrow_carrot-right"></span>
-                      </a>
-            <ul class="sub">
-              {% for g in groups %}
-                <li> <a class="" href = "/split/group/{{g.id}}"> {{ g.name }} </a> </li>
-              {% endfor %}
-            </ul>
-          </li>
-          <li class="sub-menu">
-            <a href="javascript:;" class="">
-                          <i class="icon_desktop"></i>
                           <span>My Groups</span>
                           <span class="menu-arrow arrow_carrot-right"></span>
                       </a>
             <ul class="sub">
-              {% for o in owner %}
-                <li> <a href="/split/group/{{o.id}}"> {{ o.name }} </a> </li>
+                {% for o in owner %}
+                <li> <a href="/split/group/{{o.id}}">
+                  <i class="icon_cog"></i> <span>{{ o.name }} </span></a> </li>
+              {% endfor %}
+              {% for g in groups %}
+                <li> <a class="" href = "/split/group/{{g.id}}"> {{ g.name }} </a> </li>
               {% endfor %}
             </ul>
           </li>

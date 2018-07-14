@@ -2,8 +2,44 @@
 {% load static %}
 {% block overview %}
 
-<h3 class="page-header"><i class="fa fa-laptop"></i> {{ group.name }}</h3>
-
+<!--
+<div class= "row">
+  <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+    <!--<h1 class="page-header"><i class="fa fa-laptop"></i> {{ group.name }}</h1>--
+      <div class = "container">
+        <div class = "jumbotron">
+          <h1>{{ group.name }}</h1>
+        </div>
+      </div>
+  </div>
+  <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 ">
+      <div class="info-box blue-bg">
+        <i class="fa fa-cloud-download"></i>
+        <div class="count">{{ sum }}</div>
+        <div class="title">Total Expenditure</div>
+      </div>
+      <!--/.info-box--
+  </div>
+</div>    
+-->
+<div class = "row">
+    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+        <div class = "container">
+          <div class = "jumbotron">
+            <p>{{ group.name }}</p>
+            <p>{{ group.description }}</p>
+          </div>
+        </div>
+    </div>
+    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+        <div class = "container">
+          <div class = "jumbotron">
+            <p>Created by : {{ group.user_created }}</p>
+            <p>ON : {{ group.date_created }}</p>
+          </div>
+        </div>
+    </div>  
+</div>
 <div class="row">
     <div class="col-lg-12">
       <section class="panel">
@@ -51,21 +87,66 @@
     </div>
   </div>
 
+  <div class="row">
+    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+      <div class="info-box blue-bg">
+        <i class="fa fa-cloud-download"></i>
+        <div class="count">{{ sum }}</div>
+        <div class="title">Total Expenditure</div>
+      </div>
+      <!--/.info-box-->
+    </div>
+    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+      <div class="info-box green-bg">
+        <i class="fa fa-cubes"></i>
+        <div class="count">{{pps}}</div>
+        <div class="title">Per Person Share</div>
+      </div>
+      <!--/.info-box-->
+    </div>
+ </div> 
 
-<p>date created: {{ group.date_created }} </p>
-<p>owner: {{ group.user_created }} </p>
-<p>members: 
-{% for m in members %}
-{{ m.user.username }}<br>
-{% endfor %}
-</p>
+ <div class="row">
 
+  <div class="col-lg-9 col-md-9">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h2><i class="fa fa-flag-o red"></i><strong>Personal Contribution:</strong></h2>
+        
+      </div>
+      <div class="panel-body">
+        <table class="table bootstrap-datatable countries">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Contribution</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for k,v in pers_exp.items %}
+            <tr>  
+              <td>{{ k }}</td>
+              <td>
+                  <div class="progress thin">
+                    <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="{{ v.1 }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ v.1 }}%">
+                    </div>
+                    </div>
+                  <span class="sr-only">{{ v.1 }}%</span>
+              </td>
+              <td>{{ v.0 }}</td>
+            </tr>  
+            {% endfor %}
+              
+           </tbody>
+        </table>
+      </div>
 
-<p>Total Sum: {{ sum }}</p>
-<p>Personal Expenses: <br>
-{% for k,v in pers_exp.items %}
-{{ k }} ==> {{ v }}<br>
-{% endfor %}</p>
+    </div>
+
+    </div>
+  
+</div>
 
 
 <!--<a href = "/split/add_expense/{{ group.id }}"> ADD EXPENSE </a>   <br> -->

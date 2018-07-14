@@ -17,7 +17,7 @@ class GroupProfile(models.Model):
     description = models.CharField(max_length=100, blank=True, default='')
     date_created = models.DateField(default=datetime.now, blank=True)
     user_created = models.ForeignKey(UserProfile, related_name='owners')
-    members = models.ManyToManyField(UserProfile, related_name='members')
+    members = models.ManyToManyField(UserProfile, related_name='members', blank=True)
 
     def __str__(self):
     	return self.name
