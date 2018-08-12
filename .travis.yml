@@ -18,7 +18,6 @@ install:
 
 before_script:
   - psql -c 'create database test_db;' -U postgres
-  - psql -c "CREATE USER sushant;" -U postgres
 
 script:
   - python manage.py test  
