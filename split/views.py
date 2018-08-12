@@ -139,7 +139,20 @@ def deleting(request, record_id):
 
 def create_group(request):
 
-	return render(request, 'split/create_group.html')
+	user = request.user
+	#print user.username
+	#print UserProfile.objects.all()
+
+	groups = user.users.members.all()
+	owner = user.users.owners.all()
+	
+	return render(request, 'split/create_group.html',
+		{
+			'user' : user,
+			'groups' : groups,
+			'owner' : owner,
+		})			
+
 
 def creating(request):
 
@@ -160,6 +173,15 @@ def add_member(request, group_id):
 		{
 			'group_id' : group_id
 		})
+
+import json as simplejson
+def autocompleteModel(request):
+    search_qs = User.objects.filter(username__startswith=request.GET['search'])
+    results = []
+    for r in search_qs:
+        results.append(r.username)
+    resp = request.GET['callback'] + '(' + simplejson.dumps(results) + ');'
+    return HttpResponse(resp, content_type='application/json')
 
 def adding_member(request, group_id):
 
@@ -182,5 +204,6 @@ def adding_member(request, group_id):
 
 	return redirect('group_profile', group_id = group_id)
 '''
+
 
 

@@ -1,5 +1,92 @@
-<form action="/split/adding_member/{{ group_id }}/" method="post">
-    {% csrf_token %}
-      <input type="text" name="username"  value="User Name" />
-      <input type="submit" value="Submit" />a
-</form>
+{% extends 'split/base.html' %}
+{% load static %}
+{% block overview %}
+
+<!--<form id="searchform" action="/split/adding_member/{{ group_id }}" method="get" accept-charset="utf-8">
+  <button class="searchbutton" type="submit">
+    <i class="fa fa-search"></i>
+  </button>
+  <input class="searchfield" id="searchbox" name="q" type="text" placeholder="Search">
+</form>-->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+<div class="col-lg-6">
+  <section class="panel">
+    <header class="panel-heading">
+      Create New Group
+    </header>
+    <div class="panel-body">
+      <form role="form" action="/split/adding_member/{{ group_id }}/" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="exampleInputEmail1">User Name</label>
+          <input id="userId" type="text" class="form-control" name="username" placeholder="Enter user name">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+
+    </div>
+  </section>
+</div>
+
+
+<script>
+$(document).ready(function () {
+  function searchOpen() {
+      var search = $('#userId').val();
+      var data={
+         search: search
+      }
+      $.ajax({
+          url: '/split/search-autocomplete/',
+          dataType: 'jsonp',
+          type: 'GET',
+          async: false,
+          //data: injectCsrfToken({
+          //    search: search
+          //}),
+          data: data,
+          success: function (data) {
+              searchResult(data)
+          },
+          error: function () {
+              console.log('error');
+          }
+
+      });
+  }
+  function searchResult(data) {
+      console.log('sdfsdfd');
+      $( "#userId" ).autocomplete ({
+          source: data
+      });
+  }
+  $("#userId").on('keyup', function () {
+      searchOpen();
+  });
+});
+</script>
+
+<!--
+
+<div class="col-lg-6">
+  <section class="panel">
+    <header class="panel-heading">
+      Create New Group
+    </header>
+    <div class="panel-body">
+      <form role="form" action="/split/adding_member/{{ group_id }}/" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="exampleInputEmail1">User Name</label>
+          <input type="text" class="form-control" name="username" placeholder="Enter user name">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+
+    </div>
+  </section>
+</div>
+-->
+
+{% endblock %}
+

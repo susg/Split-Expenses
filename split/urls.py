@@ -17,6 +17,6 @@ urlpatterns = [
     url(r'^creating/$', views.creating, name='creating'),
     url(r'^add_member/(?P<group_id>[0-9]+)/$', views.add_member, name='add_member'),
     url(r'^adding_member/(?P<group_id>[0-9]+)/$', views.adding_member, name='adding_member'),
-    
+    url(r'^search-autocomplete/$', views.autocompleteModel,  name='search-autocomplete'),
     #url(r'^/$', auth_views.login, name='login'),
 ]
