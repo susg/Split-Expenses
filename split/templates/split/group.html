@@ -74,10 +74,10 @@
             <tr>
                 <form action="/split/adding_expense/{{ group.id }}/" method="post">
                     {% csrf_token %}       
-                    <td><input type="date" name="date"  value="Date Spent" /></td>
+                    <td><input type="date" name="date"  id="date" /></td>
                     <td>{{ user.username }}</td>
-                    <td><input type="number" name="amount"  value="Date Spent" /></td>
-                    <td><input type="text" name="details"  value="Details" /></td>
+                    <td><input type="number" name="amount"  placeholder="Amount" /></td>
+                    <td><input type="text" name="details"  placeholder="Details" /></td>
                     <td><button type="submit" class="btn btn-primary">ADD</button></td>    
                 </form>
             </tr>
@@ -96,6 +96,7 @@
       </div>
       <!--/.info-box-->
     </div>
+    {% if flag == 1 %}
     <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
       <div class="info-box green-bg">
         <i class="fa fa-cubes"></i>
@@ -104,10 +105,12 @@
       </div>
       <!--/.info-box-->
     </div>
+    {% endif %}
  </div> 
 
+ {% if flag == 1%}
  <div class="row">
-
+  
   <div class="col-lg-9 col-md-9">
     <div class="panel panel-default">
       <div class="panel-heading">
@@ -147,7 +150,7 @@
     </div>
   
 </div>
-
+{% endif %}
 
 <!--<a href = "/split/add_expense/{{ group.id }}"> ADD EXPENSE </a>   <br> -->
 <!--<a href = "/split/delete_expense/{{ group.id }}"> DELETE EXPENSE </a> <br>-->

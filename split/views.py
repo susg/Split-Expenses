@@ -66,7 +66,11 @@ def group_profile(request, group_id):
 		pers_exp[key].append(
 			(pers_exp[key][0]*100)/tot_sum
 		)
-		print pers_exp[key][1]
+
+	flag = 0
+	if(len(group.members.all()) >= 1):
+		flag = 1	
+	print flag	
 	#pps = tot_sum/len()
 
 	#print pers_exp
@@ -81,7 +85,7 @@ def group_profile(request, group_id):
 			'pers_exp' : pers_exp,
 			'groups' : user.users.members.all(),
 			'owner' : user.users.owners.all(),
-	
+			'flag' : flag,
 		})			
 	
 def add_expense(request, group_id):
