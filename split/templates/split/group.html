@@ -40,8 +40,9 @@
         </div>
     </div>  
 </div>
+
 <div class="row">
-    <div class="col-lg-12">
+    <div class="col-lg-8">
       <section class="panel">
         <header class="panel-heading">
           Expenditure List
@@ -51,44 +52,44 @@
           <tbody>
             <tr>
               <th><i class="icon_calendar"></i> Date</th>
-              <th><i class="icon_profile"></i> Spender</th>
-              <th><i class="icon_mail_alt"></i> Amount</th>
-              <th><i class="icon_pin_alt"></i> Description</th>
-              <th><i class="icon_cogs"></i> Action</th>
+              <th><!--<i class="icon_profile"></i>--> Spender</th>
+              <th><!--<i class="icon_mail_alt"></i>--> Amount</th>
+              <th><!--<i class="icon_pin_alt"></i>--> Description</th>
+              <th><!--<i class="icon_cogs"></i>--> Action</th>
             </tr>
-            {% for r in record %}
             <tr>
+              <form action="/split/adding_expense/{{ group.id }}/" method="post">
+                  {% csrf_token %}       
+                  <td><input type="date" name="date"  id="date" /></td>
+                  <td>{{ user.username }}</td>
+                  <td><input type="number" name="amount"  placeholder="Amount" /></td>
+                  <td><input type="text" name="details"  placeholder="Details" /></td>
+                  <td><button type="submit" class="btn btn-primary">ADD</button></td>    
+              </form>
+          </tr>
+            {% for r in record %}
+            <tr style="cursor:pointer" onclick="location.href='/split/edit_record/{{ r.id }}/'">
               <td>{{ r.date_spent }}</td>
               <td>{{ r.spender }}</td>
-              <td>{{ r.amount }}</td>
+              <td>₹{{ r.amount }}</td>
               <td>{{ r.details }}</td>
               <td>  
                 <div class="btn-group">
-                  <a class="btn btn-primary" href="#"><i class="icon_plus_alt2"></i></a>
-                  <a class="btn btn-success" href="#"><i class="icon_check_alt2"></i></a>
+                 <!-- <a class="btn btn-primary" href="#"><i class="icon_plus_alt2"></i></a>
+                  <a class="btn btn-success" href="#"><i class="icon_check_alt2"></i></a>-->
                   <a class="btn btn-danger" href="/split/deleting/{{ r.id }}"><i class="icon_close_alt2"></i></a>
                 </div>
               </td>
             </tr>
             {% endfor %}
-            <tr>
-                <form action="/split/adding_expense/{{ group.id }}/" method="post">
-                    {% csrf_token %}       
-                    <td><input type="date" name="date"  id="date" /></td>
-                    <td>{{ user.username }}</td>
-                    <td><input type="number" name="amount"  placeholder="Amount" /></td>
-                    <td><input type="text" name="details"  placeholder="Details" /></td>
-                    <td><button type="submit" class="btn btn-primary">ADD</button></td>    
-                </form>
-            </tr>
+            
           </tbody>
         </table>
       </section>
     </div>
-  </div>
 
-  <div class="row">
-    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+    <div class = "row">
+    <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
       <div class="info-box blue-bg">
         <i class="fa fa-cloud-download"></i>
         <div class="count">{{ sum }}</div>
@@ -97,7 +98,7 @@
       <!--/.info-box-->
     </div>
     {% if flag == 1 %}
-    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+    <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
       <div class="info-box green-bg">
         <i class="fa fa-cubes"></i>
         <div class="count">{{pps}}</div>
@@ -106,8 +107,10 @@
       <!--/.info-box-->
     </div>
     {% endif %}
- </div> 
+   </div>
+  </div>
 
+  
  {% if flag == 1%}
  <div class="row">
   
