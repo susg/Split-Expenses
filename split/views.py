@@ -66,7 +66,11 @@ def group_profile(request, group_id):
 		pers_exp[key].append(
 			(pers_exp[key][0]*100)/tot_sum
 		)
-		print pers_exp[key][1]
+
+	flag = 0
+	if(len(group.members.all()) >= 1):
+		flag = 1	
+	print flag	
 	#pps = tot_sum/len()
 
 	#print pers_exp
@@ -81,7 +85,7 @@ def group_profile(request, group_id):
 			'pers_exp' : pers_exp,
 			'groups' : user.users.members.all(),
 			'owner' : user.users.owners.all(),
-	
+			'flag' : flag,
 		})			
 	
 def add_expense(request, group_id):
@@ -169,11 +173,19 @@ def creating(request):
 
 def add_member(request, group_id):
 
+	user = request.user
+	groups = user.users.members.all()
+	owner = user.users.owners.all()
+	
 	return render(request, 'split/add_member.html',
 		{
-			'group_id' : group_id
-		})
+			'user' : user,
+			'groups' : groups,
+			'owner' : owner,
+			'group_id' : group_id,
+		})			
 
+	
 import json as simplejson
 def autocompleteModel(request):
     search_qs = User.objects.filter(username__startswith=request.GET['search'])
@@ -205,5 +217,18 @@ def adding_member(request, group_id):
 	return redirect('group_profile', group_id = group_id)
 '''
 
+def edit_record(request, record_id):
+
+	user = request.user
+	groups = user.users.members.all()
+	owner = user.users.owners.all()
+	
+	return render(request, 'split/edit_record.html',
+		{
+			'user' : user,
+			'groups' : groups,
+			'owner' : owner,
+			'r' : ExpenseDetail.objects.get(pk = record_id),
+		})			
 
 
