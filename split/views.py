@@ -219,5 +219,16 @@ def adding_member(request, group_id):
 
 def edit_record(request, record_id):
 
-	return HttpResponse("hello")
+	user = request.user
+	groups = user.users.members.all()
+	owner = user.users.owners.all()
+	
+	return render(request, 'split/edit_record.html',
+		{
+			'user' : user,
+			'groups' : groups,
+			'owner' : owner,
+			'r' : ExpenseDetail.objects.get(pk = record_id),
+		})			
+
 

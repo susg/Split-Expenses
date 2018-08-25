@@ -1,0 +1,28 @@
+{% extends 'split/base.html' %}
+{% load static %}
+{% block overview %}
+
+<div class="col-lg-8">
+  <section class="panel">
+    <header class="panel-heading">
+      Edit Record
+    </header>
+    <div class="panel-body">
+        <tr>
+        <form action="/split/adding_expense/{{ group.id }}/" method="post">
+            {% csrf_token %}       
+            <td><input type="date" name="date"  id="date" value = "{{ r.date_spent }}"/></td>
+            <td>{{ user.username }}</td>
+            <td><input type="number" name="amount"  value="{{ r.amount }}" /></td>
+            <td><input type="text" name="details"  value="{{ r.details }}" /></td>
+            <td><button type="submit" class="btn btn-primary">ADD</button></td>    
+        </form>
+        </tr>
+    </div>
+  </section>
+</div>
+
+
+
+{% endblock %}
+
