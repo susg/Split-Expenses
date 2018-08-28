@@ -1,28 +1,71 @@
 {% extends 'split/base.html' %}
 {% load static %}
 {% block overview %}
+      
+<div class="row">
+   <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
+      <div class="info-box blue-bg">
+         <i class="fa fa-cloud-download"></i>
+         <div class="count">{{ user.users.total_balance }}</div>
+         <div class="title">Total Balance</div>
+      </div>
+   </div>
+   <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
+      <div class="info-box red-bg">
+         <i class="fa fa-cloud-download"></i>
+         <div class="count"> 100 </div>
+         <div class="title">You owe</div>
+      </div>
+   </div>
+   <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
+      <div class="info-box green-bg">
+         <i class="fa fa-cloud-download"></i>
+         <div class="count"> 100 </div>
+         <div class="title">You are owed</div>
+      </div>
+   </div>
+</div>
 
-<!--main content start-->
-      <!--overview start-->
-      Members: <br>
-<ul>
-{% for g in groups %}
-<li> <a href = "/split/group/{{g.id}}"> {{ g.name }} </a> </li>
-{% endfor %}
-</ul>
-<br>
-
-Owner:
-<ul>
-{% for o in owner %}
-<li> <a href="/split/group/{{o.id}}"> {{ o.name }} </a> </li>
-{% endfor %}
-</ul>
-<br>
-
-<a href="/split/create_group">CREATE GROUP </a>
-
-     
-
+<div class="row">
+   <div class="col-lg-6">
+      <section class="panel">
+         
+         <div class="panel-body progress-panel">
+            <div class="row">
+               <div class="col-lg-6 task-progress pull-left">
+                  <h1>Summary</h1>
+               </div>
+               <div class="col-lg-3">
+                  <span class="profile-ava pull-right">
+                     <img alt="" class="simple" src="img/avatar1_small.jpg">
+                     Jenifer smith
+                  </span>
+               </div>
+            </div>
+         </div>
+         
+         <table class="table table-hover personal-task">
+            <tbody>
+               {% for g in groups %}
+               <tr>
+                  <td>{{ g.name }}</td>
+                  <td>
+                     <span class="badge bg-important">Upload</span>
+                  </td>
+               </tr>
+               {% endfor %}
+               {% for o in owner %}
+               <tr>
+                  <td>{{ o.name }}</td>
+                  <td>
+                     <span class="badge bg-important">Upload</span>
+                  </td>
+               </tr>
+               {% endfor %}
+            </tbody>
+         </table> 
+      </section>
+   </div>
+</div>           
 
 {% endblock %}

@@ -107,6 +107,13 @@ def adding_expense(request, group_id):
 	r = ExpenseDetail(spender = spender, group_spent = group, date_spent = date_sp,
 		 				amount = amount, details = details)
 	r.save()
+
+	print "here "
+	print spender.total_balance
+	print amount
+	spender.total_balance = spender.total_balance - int(amount)
+	print spender.total_balance
+	spender.save()
 	#group.add(r)
 
 	return redirect('group_profile', group_id = group_id)
@@ -136,6 +143,8 @@ def deleting(request, record_id):
 
 	r = ExpenseDetail.objects.get(id = record_id)
 	group_id = r.group_spent.id 
+	r.spender.total_balance += r.amount
+	r.spender.save()
 	r.delete()
 
 	return redirect('group_profile', group_id = group_id)
