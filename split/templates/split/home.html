@@ -13,14 +13,14 @@
    <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
       <div class="info-box red-bg">
          <i class="fa fa-cloud-download"></i>
-         <div class="count"> 100 </div>
+         <div class="count"> {{ user.users.total_owe }} </div>
          <div class="title">You owe</div>
       </div>
    </div>
    <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
       <div class="info-box green-bg">
          <i class="fa fa-cloud-download"></i>
-         <div class="count"> 100 </div>
+         <div class="count">{{ user.users.total_owed }}  </div>
          <div class="title">You are owed</div>
       </div>
    </div>
