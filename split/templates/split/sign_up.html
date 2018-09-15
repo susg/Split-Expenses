@@ -85,16 +85,3 @@
 {# Assumes you setup the password_reset view in your URLconf #}
 <p><a href="{% url 'password_reset' %}">Lost password?</a></p>
 -->
-
-
-<form action="/split/signing_up/" method="post">
-    {% csrf_token %}
-      <input type="text" name="username"  value="User Name" />
-      <input type="text" name="fname"  value="First Name" />
-      <input type="text" name="lname"  value="Last Name" />
-      <input type="email" name="email"  value="Email" />
-      <input type="password" name="pwd"  value="Password" />
-      <input type="submit" value="Submit" />a
-</form>
-
-

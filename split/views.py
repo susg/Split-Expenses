@@ -49,8 +49,9 @@ def profile(request):
 	for o in owner:
 		for m in o.members.all():
 			friends_set.add(m)
-
-	friends_set.remove(user.users)
+	
+	if user.users in friends_set:
+		friends_set.remove(user.users)
 	print "here: "
 	print friends_set						
 
