@@ -92,7 +92,7 @@
     <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
       <div class="info-box blue-bg">
         <i class="fa fa-cloud-download"></i>
-        <div class="count">{{ sum }}</div>
+        <div class="count">{{ group.total_expense }}</div>
         <div class="title">Total Expenditure</div>
       </div>
       <!--/.info-box-->
@@ -111,7 +111,7 @@
   </div>
 
   
- {% if flag == 1%}
+ {% if flag == 1 and group.total_expense > 0 %}
  <div class="row">
   
   <div class="col-lg-9 col-md-9">

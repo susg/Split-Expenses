@@ -39,6 +39,22 @@ def profile(request):
 	groups = user.users.members.all()
 	owner = user.users.owners.all()
 	
+	friends_set = set()
+
+	for g in groups:
+		for m in g.members.all():
+			friends_set.add(m)
+		friends_set.add(g.user_created)
+
+	for o in owner:
+		for m in o.members.all():
+			friends_set.add(m)
+	
+	if user.users in friends_set:
+		friends_set.remove(user.users)
+	print "here: "
+	print friends_set						
+
 	return render(request, 'split/home.html',
 		{
 			'user' : user,
@@ -53,24 +69,23 @@ def group_profile(request, group_id):
 	#print group.members.all()
 	record = group.expensedetail_set.all()
 	pers_exp = {}
-	tot_sum = 0
 	for r in record:
-		tot_sum += r.amount
 		try:
 			pers_exp[r.spender.user.username][0] += r.amount
 		except KeyError:
 			pers_exp[r.spender.user.username] = []
 			pers_exp[r.spender.user.username].append(r.amount)
 
-	for key in pers_exp:
-		pers_exp[key].append(
-			(pers_exp[key][0]*100)/tot_sum
-		)
+	if group.total_expense > 0 :
+		for key in pers_exp:
+			pers_exp[key].append(
+				(pers_exp[key][0]*100)/group.total_expense
+			)
 
 	flag = 0
 	if(len(group.members.all()) >= 1):
 		flag = 1	
-	print flag	
+	#print flag	
 	#pps = tot_sum/len()
 
 	#print pers_exp
@@ -80,8 +95,7 @@ def group_profile(request, group_id):
 			'group' : group,
 			'members' : group.members.all(),
 			'record' : record,
-			'sum' : tot_sum,
-			'pps' : tot_sum/(len(group.members.all()) + 1),
+			'pps' : group.total_expense/(len(group.members.all()) + 1),
 			'pers_exp' : pers_exp,
 			'groups' : user.users.members.all(),
 			'owner' : user.users.owners.all(),
@@ -107,7 +121,23 @@ def adding_expense(request, group_id):
 	r = ExpenseDetail(spender = spender, group_spent = group, date_spent = date_sp,
 		 				amount = amount, details = details)
 	r.save()
-	#group.add(r)
+
+	share = float(amount)/(len(group.members.all()) + 1)
+	for g in group.members.all() :
+		g.total_owe += share
+		g.save()
+	group.user_created.total_owe += share
+	group.user_created.save()	
+	
+	spender.total_balance -= float(amount)
+	spender.total_owed += (float(amount) - share)
+	spender.total_owe -= share
+	spender.save() 
+	
+	group.total_expense += float(amount)
+	group.save()
+
+	
 
 	return redirect('group_profile', group_id = group_id)
 
@@ -135,10 +165,26 @@ def delete_expense(request, group_id):
 def deleting(request, record_id):
 
 	r = ExpenseDetail.objects.get(id = record_id)
-	group_id = r.group_spent.id 
+	group = r.group_spent
+
+	share = float(r.amount/(len(group.members.all()) + 1))
+	for g in group.members.all() :
+		g.total_owe -= share
+		g.save()
+	group.user_created.total_owe -= share
+	group.user_created.save()	
+	
+	r.spender.total_balance += r.amount
+	r.spender.total_owed -= (r.amount - share)
+	r.spender.total_owe += share
+	r.spender.save() 
+	
+	r.group_spent.total_expense -= r.amount
+	r.group_spent.save()
+
 	r.delete()
 
-	return redirect('group_profile', group_id = group_id)
+	return redirect('group_profile', group_id = group.id)
 
 
 def create_group(request):

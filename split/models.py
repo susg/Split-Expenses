@@ -4,8 +4,10 @@ from datetime import  datetime
  
 class UserProfile(models.Model):
     user = models.OneToOneField(User, related_name='users')
-    total_balance = models.IntegerField(default=0)
-
+    total_balance = models.FloatField(default=0.0)
+    total_owe = models.FloatField(default= 0.0, blank = True)
+    total_owed = models.FloatField(default= 0.0, blank = True)
+    
     def __str__(self):
     	return self.user.username
 
@@ -18,6 +20,7 @@ class GroupProfile(models.Model):
     date_created = models.DateField(default=datetime.now, blank=True)
     user_created = models.ForeignKey(UserProfile, related_name='owners')
     members = models.ManyToManyField(UserProfile, related_name='members', blank=True)
+    total_expense = models.FloatField(default = 0.0, blank = True)
 
     def __str__(self):
     	return self.name
@@ -29,7 +32,7 @@ class ExpenseDetail(models.Model):
 	spender = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
 	group_spent = models.ForeignKey(GroupProfile, on_delete=models.CASCADE)
 	details = models.CharField(max_length=20, blank=True, default='')
-	amount = models.IntegerField(default=0)
+	amount = models.FloatField(default=0)
 	date_spent = models.DateField(default=datetime.now, blank=True)
 
 	def __str__(self):
