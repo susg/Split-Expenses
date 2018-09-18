@@ -29,5 +29,23 @@ class LoginTestCase(TestCase):
         resp = self.client.get('/split/')
         self.assertEqual(resp.status_code, 200)
         
+class GroupTestCase(TestCase):
+
+    def setUp(self):
+
+        self.credentials = {'username' : 'test_user', 'password' : 'test_pass' }
+        user = User.objects.create_user(**self.credentials)
+        u = UserProfile(user = user, total_balance = 0)
+        u.save()
+        self.client.post('/split/login/', {'username': 'test_user', 'password' : 'test_pass' } )
         
-	
+        
+    def test_create_group(self):
+
+        resp = self.client.get('/split/create_group/')
+        #print resp
+        self.assertEqual(resp.status_code, 200)
+        self.client.post('/split/creating/', {'name': 'test_group', 'description' : 'testing' } )
+        resp = self.client.get('/split/group/1/')
+        self.assertEqual(resp.status_code, 200)
+        
