@@ -124,14 +124,20 @@ def adding_expense(request, group_id):
 	for g in group.members.all() :
 		g.total_owe += share
 		g.save()
-	group.user_created.total_owe += share
-	group.user_created.save()	
+	if spender == group.user_created:
+		spender.total_owe += share
+		spender.save()
+	else:
+		group.user_created.total_owe += share
+		group.user_created.save()	
 	
 	spender.total_balance -= float(amount)
 	spender.total_owed += (float(amount) - share)
 	spender.total_owe -= share
 	spender.save() 
 	
+	print "Last owe person = " + str(spender)
+
 	group.total_expense += float(amount)
 	group.save()
 
