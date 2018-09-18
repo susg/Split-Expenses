@@ -52,9 +52,7 @@ def profile(request):
 	
 	if user.users in friends_set:
 		friends_set.remove(user.users)
-	print "here: "
-	print friends_set						
-
+	
 	return render(request, 'split/home.html',
 		{
 			'user' : user,
@@ -215,6 +213,7 @@ def creating(request):
 						user_created = owner)
 	g.save()
 	#g.members.add(owner)
+	
 	return redirect('group_profile', group_id = g.id)
 
 def add_member(request, group_id):
